@@ -1,6 +1,9 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
+import os
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for frontend requests
 
 # Mock database
 products = [
@@ -19,5 +22,11 @@ def get_product(id):
         return jsonify(product)
     return jsonify({"message": "Product not found"}), 404
 
+@app.route("/health", methods=["GET"])
+def health_check():
+    return jsonify({"status": "healthy"}), 200
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    host = "0.0.0.0"
+    port = int(os.environ.get("PORT", 5000))  # Use environment variable or default to 5000
+    app.run(host=host, port=port)
