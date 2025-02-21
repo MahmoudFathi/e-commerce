@@ -1,18 +1,17 @@
-# Use official Python image as base
-FROM python:3.9-slim
+# Use a lightweight Python image
+FROM python:3.9
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Copy requirements and install dependencies
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy the application files
+COPY . .
 
-# Copy application code
-COPY . /app/
+# Install dependencies
+RUN pip install --no-cache-dir flask flask-cors
 
-# Expose the app on port 5000
+# Expose the port Flask runs on
 EXPOSE 5000
 
-# Command to run the app
+# Run the application
 CMD ["python", "app.py"]
