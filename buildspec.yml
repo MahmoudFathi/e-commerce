@@ -10,7 +10,7 @@ phases:
     commands:
       - echo Building Docker image...
       - docker build -t product-service .
-      -- echo "Tagging the image.."
+      - echo "Tagging the image.."
       - docker tag product-service:latest 058264351046.dkr.ecr.us-east-1.amazonaws.com/product-service:latest
 
       
