@@ -5,22 +5,21 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 058264351046.dkr.ecr.us-east-1.amazonaws.com
-      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/product-service
-      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 
   build:
     commands:
       - echo Building Docker image...
-      - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
-      - docker tag $REPOSITORY_URI:$IMAGE_TAG $REPOSITORY_URI:latest
+      - docker build -t product-service .
+      -- echo "Tagging the image.."
+      - docker tag product-service:latest 058264351046.dkr.ecr.us-east-1.amazonaws.com/product-service:latest
 
+      
   post_build:
     commands:
       - echo Pushing Docker images to ECR...
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - docker push $REPOSITORY_URI:latest
-      - echo Writing image definitions file...
-      - printf '[{"name":"product-service","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-
+      - docker push 058264351046.dkr.ecr.us-east-1.amazonaws.com/product-service:latest
+      
+      
 artifacts:
-  files: imagedefinitions.json
+  files: 
+     - '**/*'
